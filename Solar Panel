@@ -1,0 +1,78 @@
+//Materials:
+//(1) Arduino
+//(1) Solar Panel
+//(2) Photoresistors
+//(9) male to male wire (soldered)
+//(1) Servo Motor
+//(2) 10k ohm resistors
+
+
+//Connections:
+//Servo Motor power to 5V pin
+//5v pin to Photoresistor
+//5v pin to Photoresistor
+//Photoresitor to A0
+//Servo Motor ground to GND pin
+//Photoresistor to 10K resistor
+//Photoresistor to 10K resistor
+//Photoresitor to A0
+//Servo Motor signal to pin 10
+//10K resistor to GND
+
+
+//Instructions:
+//Steps to build everything.  Please include at least 5 steps with pictures.
+//First, we measured out the pieces from the cardboard boxes and used the boxcutters to cut out the measured pieces.
+//Next, we constructed a rectangular box using the hot glue gun, we also added a cardboard stand glued the servo motor to the stand.
+//Afterwards, we soldered the wires together in order to connect the servo and the photoresistors to power, ground, and signal for everything to be powered and have signal. We did have to solder to combine some wires as there was only one connection point for the 5V on the Arduino. We soldered wires from one photoresistor to A0 and another photoresistor to A1.
+//Then, we put in the finished product of the arduino inside the box and taped on the photoresistors on the outside.
+//We also used paperclip pins with one side soldered to connect the servo motor to a small piece of cardboard that mounted the solar panel to it.
+//Since the solar panel isn’t powerful enough to power the arduino we added a battery pack to it.
+//After putting everything together, we put on black paint.
+
+
+//Code:
+#include <Servo.h>
+Servo servo ;
+int topLDR = 0;
+int bottomLDR = 1;
+int top = 0;
+int bottom = 0;
+int error = 0;
+//int calibration = 600;
+int servoposition=90;
+
+void setup(){
+  pinMode(topLDR,INPUT);
+  pinMode(bottomLDR,INPUT);
+  servo.attach(10);
+  Serial.begin(9600);
+}
+
+void loop(){
+  top = analogRead(topLDR);
+  bottom = analogRead(bottomLDR);
+  Serial.print("top: ");
+  Serial.println(top);
+  Serial.print("bottom: ");
+  Serial.println(bottom);
+  Serial.print("servo: ");
+  Serial.println(servoposition);
+  delay(500);
+  
+  if(top-20>bottom && servoposition<=180){
+    servoposition=servoposition+10;
+    servo.write(servoposition);
+    delay(500);
+  }
+  else if(bottom-15>top&& servoposition>=0){
+    servoposition=servoposition-10;
+    servo.write(servoposition);
+    delay(500);
+  }
+  else{
+    servoposition==0;
+    servo.write(servoposition);
+    delay(500);
+  }
+}
